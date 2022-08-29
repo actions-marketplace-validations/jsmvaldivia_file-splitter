@@ -1,5 +1,6 @@
-name: 'file-splitter-action'
+name: 'file-splitter'
 description: 'Split file into chunks of desired size'
+
 inputs:
   file-path:
     description: 'File path'
