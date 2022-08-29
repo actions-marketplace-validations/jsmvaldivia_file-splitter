@@ -1,4 +1,4 @@
-const split = require("./src/split");
+const split = require("./split");
 const core = require('@actions/core');
 
 

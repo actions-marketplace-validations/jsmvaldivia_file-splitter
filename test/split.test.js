@@ -5,7 +5,7 @@ var chai = require('chai');
 chai.use(require('chai-fs'));
 var expect = chai.expect;
 
-const split = require('../src/split')
+const split = require('../split')
 
 const outDir = 'out';
 
