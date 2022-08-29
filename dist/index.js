@@ -2846,10 +2846,14 @@ exports.default = _default;
 const lineByLine = __nccwpck_require__(235);
 const fs = __nccwpck_require__(747);
 
-const split = async (filePath, chunkSize) => {
+const split = async (filePath, chunkSize, outDir) => {
 
     const maxChunk = chunkSize;
     const textLines = new lineByLine(filePath);
+
+    if (!fs.existsSync(outDir)) {
+        fs.mkdirSync(outDir);
+    }
 
     let line;
     let lineNumber = 1;
@@ -2874,7 +2878,7 @@ const split = async (filePath, chunkSize) => {
 
     function createFileFromChunk() {
         chunkNumber++;
-        var file = fs.createWriteStream('out/array' + chunkNumber + '.txt');
+        var file = fs.createWriteStream(outDir + '/array' + chunkNumber + '.txt');
         file.on('error', (err) => console.error(err));
         chunkArray.forEach((chunkLine) => file.write(chunkLine + '\n'));
         file.end();
@@ -3021,11 +3025,15 @@ const core = __nccwpck_require__(186);
 
 
 try {
-    console.debug(core.getInput('file-path'))
-    console.debug(core.getInput('chunk-size'))
-    console.debug(core.getInput('chunk'))
+    const filePath = core.getInput('file-path');
+    const chunkSize = core.getInput('chunk-size');
+    const outDir = core.getInput('out-dir');
 
-    split(core.getInput('file-path'), core.getInput('chunk-size'))
+    console.debug("File path: " + filePath)
+    console.debug("Chunk size: " + chunkSize)
+    console.debug("Out directory: " + outDir)
+
+    split(filePath, chunkSize, outDir)
         .then(list => core.setOutput("file-path-list", list));
 
 } catch (error) {
