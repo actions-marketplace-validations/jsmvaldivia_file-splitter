@@ -38,28 +38,28 @@ describe('File', function () {
 
     describe('empty', function () {
         it('should produce 0 files', async function () {
-            await split('test/fixtures/empty.txt', 10);
+            await split('test/fixtures/empty.txt', 10, outDir);
             expect(outDir).to.be.a.directory("").and.empty;
         });
     });
 
     describe('with more than 10 lines but less than 20', function () {
         it('should produce 2 files', async function () {
-            await split('test/fixtures/fifteenLines.txt', 10);
+            await split('test/fixtures/fifteenLines.txt', 10, outDir);
             expect(outDir).to.be.a.directory("").and.include.contents(["array1.txt", "array2.txt"], "");
         });
     });
 
     describe('with less than 10 lines', function () {
         it('should produce 1 file', async function () {
-            await split('test/fixtures/nineLines.txt', 10);
+            await split('test/fixtures/nineLines.txt', 10, outDir);
             expect(outDir).to.be.a.directory("").and.include.contents(["array1.txt"], "");
         });
     });
 
     describe('with exactly 10 lines', function () {
         it('should produce 1 file', async function () {
-            await split('test/fixtures/tenLines.txt', 10);
+            await split('test/fixtures/tenLines.txt', 10, outDir);
             expect(outDir).to.be.a.directory("").and.include.contents(["array1.txt"], "");
         });
     });

@@ -8,8 +8,12 @@ inputs:
     default: '.'
   chunk-size:
     description: 'File path'
-    required: true
-    default: '.'  
+    required: false
+    default: '10'  
+  out-dir:
+    description: 'Out directory'
+    required: false
+    default: '.'
 outputs:
   file-path-list: # id of output
     description: 'List of file paths of files created'

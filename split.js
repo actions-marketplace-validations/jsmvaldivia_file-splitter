@@ -1,10 +1,14 @@
 const lineByLine = require('n-readlines');
 const fs = require('fs');
 
-const split = async (filePath, chunkSize) => {
+const split = async (filePath, chunkSize, outDir) => {
 
     const maxChunk = chunkSize;
     const textLines = new lineByLine(filePath);
+
+    if (!fs.existsSync(outDir)) {
+        fs.mkdirSync(outDir);
+    }
 
     let line;
     let lineNumber = 1;
@@ -29,7 +33,7 @@ const split = async (filePath, chunkSize) => {
 
     function createFileFromChunk() {
         chunkNumber++;
-        var file = fs.createWriteStream('out/array' + chunkNumber + '.txt');
+        var file = fs.createWriteStream(outDir + '/array' + chunkNumber + '.txt');
         file.on('error', (err) => console.error(err));
         chunkArray.forEach((chunkLine) => file.write(chunkLine + '\n'));
         file.end();

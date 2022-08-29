@@ -3,11 +3,15 @@ const core = require('@actions/core');
 
 
 try {
-    console.debug(core.getInput('file-path'))
-    console.debug(core.getInput('chunk-size'))
-    console.debug(core.getInput('chunk'))
+    const filePath = core.getInput('file-path');
+    const chunkSize = core.getInput('chunk-size');
+    const outDir = core.getInput('out-dir');
 
-    split(core.getInput('file-path'), core.getInput('chunk-size'))
+    console.debug("File path: " + filePath)
+    console.debug("Chunk size: " + chunkSize)
+    console.debug("Out directory: " + outDir)
+
+    split(filePath, chunkSize, outDir)
         .then(list => core.setOutput("file-path-list", list));
 
 } catch (error) {
