@@ -1,0 +1,69 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm test
+    
+    - name: Install svu
+      run:  |
+        mkdir -p $HOME/.local/bin
+        curl -L https://github.com/caarlos0/svu/releases/download/v1.9.0/svu_1.9.0_linux_amd64.tar.gz | tar zx -C $HOME/.local/bin
+        echo $HOME/.local/bin >> $GITHUB_PATH
+      shell: bash
+
+    - id: version
+      name: Version
+      run: |
+        incremental=true
+        latest=$(svu current --prefix "")
+        next=$(svu --prefix "")
+        if [[ "$latest" == "$next" ]]; then
+          incremental=false
+        fi
+        echo "::set-notice ::Latest version = $latest"
+        echo "::set-notice ::Next version = $next"
+        echo "::set-notice ::Incremental version = $incremental"
+        echo "::set-output name=latest::$latest"
+        echo "::set-output name=next::$next"
+        echo "::set-output name=incremental::$incremental"
+      shell: bash
+      
+    - run: |
+        npm version --no-git-tag-version ${{ steps.version.outputs.next }}
+      shell: bash
+
+    - name: Configure Git 
+      run: |
+        git config --global user.name "jsmvaldivia"
+        git config --global user.email "jsmvaldivia@users.noreply.github.com"
+      shell: bash
+
+    - name: Commit Bump
+      run: |
+        git commit -am "bump: ${{ steps.version.outputs.latest }} -> ${{ steps.version.outputs.next }}" -m "[skip ci]"
+        git push
+      shell: bash
+
+    - run: gh release create ${{ steps.version.outputs.next }} --generate-notes
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}

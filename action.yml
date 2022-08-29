@@ -1,0 +1,17 @@
+name: 'file-splitter-action'
+description: 'Split file into chunks of desired size'
+inputs:
+  file-path:
+    description: 'File path'
+    required: true
+    default: '.'
+  chunk-size:
+    description: 'File path'
+    required: true
+    default: '.'  
+outputs:
+  file-path-list: # id of output
+    description: 'List of file paths of files created'
+runs:
+  using: 'node16'
+  main: 'index.js'
