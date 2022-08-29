@@ -15,4 +15,4 @@ outputs:
     description: 'List of file paths of files created'
 runs:
   using: 'node16'
-  main: 'index.js'
+  main: 'dist/index.js'
