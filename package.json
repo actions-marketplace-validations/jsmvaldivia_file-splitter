@@ -1,6 +1,6 @@
 {
   "name": "file-splitter-action",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "file-splitter-action is an action that splits text file every nth line",
   "main": "index.js",
   "scripts": {
